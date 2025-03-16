@@ -4,15 +4,25 @@ import TodoItems from "./TodoItems";
 import { useRef, useState } from "react";
 
 const Todo = () => {
-  const [task, setTask] = useState<string[]>([]);
+  const [task, setTask] = useState<{ text: string; id: number; completed: boolean }[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+
   const add = () => {
     const inputText = inputRef.current?.value;
     if (inputText) {
-      setTask([...task, inputText]);
+      const newTodo = { 
+        text: inputText, 
+        id: Date.now(), 
+        completed: false
+      };
+      setTask([...task, newTodo]);
       inputRef.current!.value = "";
     }
   };
+
+  const deleteTask = (id: number) => {
+    setTask(task.filter((t) => t.id !== id));
+  }
 
   return (
     <div className="bg-fuchsia-200 place-self-center w-11/12 max-w-md flex flex-col p-7 min-h-[550px] rounded-xl">
@@ -41,7 +51,7 @@ const Todo = () => {
       </div>
       <div>
         {task.map((t) => {
-          return <TodoItems text={t} />;
+          return <TodoItems deleteTask={deleteTask} id={t.id} text={t.text} />;
         })}
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { IoTrashBin } from "react-icons/io5";
 import { Button } from './ui/button'
 
-const TodoItems = ({text}:{text:string}) => {
+const TodoItems = ({text, id, deleteTask}:{text:string, id:number, deleteTask: (id:number) => void}) => {
   return (
     <div className='flex items-center my-3 gap-2'>
       <div className='flex flex-1 item-center cursor-pointer'>
@@ -9,7 +9,7 @@ const TodoItems = ({text}:{text:string}) => {
           {text}
         </p>
       </div>
-      <Button className="cursor-pointer" variant="destructive">
+      <Button onClick={() => deleteTask(id)} className="cursor-pointer" variant="destructive">
         <IoTrashBin size='small' />
       </Button>
       
