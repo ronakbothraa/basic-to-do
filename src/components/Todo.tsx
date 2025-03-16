@@ -1,19 +1,25 @@
 import { IoCheckmarkDoneCircle, IoAddCircle } from "react-icons/io5";
 import { Button } from "./ui/button";
 import TodoItems from "./TodoItems";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Todo = () => {
-  const [task, setTask] = useState<{ text: string; id: number; completed: boolean }[]>([]);
+  const [task, setTask] = useState<
+    { text: string; id: number; completed: boolean }[]
+  >(
+    localStorage.getItem("task")
+      ? JSON.parse(localStorage.getItem("task")!)
+      : []
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   const add = () => {
     const inputText = inputRef.current?.value;
     if (inputText) {
-      const newTodo = { 
-        text: inputText, 
-        id: Date.now(), 
-        completed: false
+      const newTodo = {
+        text: inputText,
+        id: Date.now(),
+        completed: false,
       };
       setTask([...task, newTodo]);
       inputRef.current!.value = "";
@@ -22,7 +28,11 @@ const Todo = () => {
 
   const deleteTask = (id: number) => {
     setTask(task.filter((t) => t.id !== id));
-  }
+  };
+
+  useEffect(() => {
+    localStorage.setItem("task", JSON.stringify(task));
+  }, [task]);
 
   return (
     <div className="bg-fuchsia-200 place-self-center w-11/12 max-w-md flex flex-col p-7 min-h-[550px] rounded-xl">
